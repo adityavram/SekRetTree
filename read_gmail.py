@@ -1,3 +1,8 @@
+# run me first
+# pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib openai
+# to run
+# python read_gmail.py
+
 import os.path
 import base64
 import json

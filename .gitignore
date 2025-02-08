@@ -1,0 +1,12 @@
+# Secrets and credentials
+.env
+credentials.json
+token.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/ 

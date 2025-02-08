@@ -53,8 +53,23 @@ def read_message(service, user_id, msg_id):
     """Read an individual message."""
     try:
         message = service.users().messages().get(userId=user_id, id=msg_id).execute()
-        msg_str = base64.urlsafe_b64decode(message['payload']['body']['data'].encode('ASCII')).decode('utf-8')
-        return msg_str
+        
+        # Get the message parts
+        payload = message['payload']
+        parts = payload.get('parts', [])
+        
+        # If the message is simple (no parts)
+        if 'body' in payload and payload['body'].get('data'):
+            return base64.urlsafe_b64decode(payload['body']['data'].encode('ASCII')).decode('utf-8')
+            
+        # If the message has parts (multipart)
+        for part in parts:
+            if part['mimeType'] == 'text/plain':
+                if 'data' in part['body']:
+                    return base64.urlsafe_b64decode(part['body']['data'].encode('ASCII')).decode('utf-8')
+                
+        return "No text content found in message"
+        
     except Exception as error:
         print(f'An error occurred: {error}')
         return None
